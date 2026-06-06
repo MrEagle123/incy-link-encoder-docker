@@ -1,0 +1,53 @@
+{
+  "name": "@incy/link-encoder",
+  "version": "1.0.1",
+  "description": "Encode subscription URLs into incy://crypt1/<payload> deep links so they don't sit in chat histories as plain VPN-URL text. AES-256-GCM with a key shared with the INCY iOS/Android/Desktop clients.",
+  "keywords": [
+    "incy",
+    "vpn",
+    "deeplink",
+    "encryption",
+    "aes-gcm"
+  ],
+  "homepage": "https://incy.cc/encrypt",
+  "bugs": {
+    "url": "https://github.com/INCY-DEV/incy-link-encoder/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/INCY-DEV/incy-link-encoder.git"
+  },
+  "license": "MIT",
+  "author": "INCY <main@incy.cc>",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "test": "node --import tsx --test test/*.test.ts",
+    "lint": "tsc --noEmit",
+    "gen-keymat": "node scripts/gen-keymat.mjs",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0"
+  }
+}
