@@ -43,6 +43,77 @@ console.log(decoded.url, decoded.name);
 | `url`    | `string`  | The http(s) subscription URL. Required.            |
 | `opts.name` | `string?` | Display name shown in the receiver's import sheet. |
 
+
+## Docker HTTP API
+
+Можно пользоваться проектом без установки Node.js, npm-зависимостей и
+без сборки на хосте. На хосте нужны только Git и Docker / Docker
+Compose: код клонируется, а установка зависимостей, TypeScript-сборка и
+запуск HTTP API происходят внутри контейнера.
+
+### Запуск через Docker Compose
+
+```bash
+git clone https://github.com/INCY-DEV/incy-link-encoder.git
+cd incy-link-encoder
+docker compose up --build -d
+```
+
+После запуска API доступен на `http://localhost:8080`. Остановить
+контейнер можно командой:
+
+```bash
+docker compose down
+```
+
+### Запуск через обычный Docker
+
+```bash
+git clone https://github.com/INCY-DEV/incy-link-encoder.git
+cd incy-link-encoder
+docker build -t incy-link-encoder-docker .
+docker run --rm -p 8080:8080 incy-link-encoder-docker
+```
+
+Контейнер слушает порт `8080` по умолчанию. Если нужно поменять порт
+внутри контейнера, задайте переменную окружения `PORT` и пробросьте
+соответствующий порт наружу.
+
+### Проверка здоровья
+
+```bash
+curl http://localhost:8080/health
+```
+
+Ответ:
+
+```json
+{"ok":true}
+```
+
+### Шифрование ссылки
+
+Основной endpoint принимает незашифрованную подписочную ссылку и
+возвращает `incy://crypt1/...` ссылку.
+
+```bash
+curl -s http://localhost:8080/encode \
+  -H 'content-type: application/json' \
+  -d '{"url":"https://sub.your-provider.example/abc123token","name":"My Provider VPN"}'
+```
+
+Ответ:
+
+```json
+{"link":"incy://crypt1/..."}
+```
+
+Для простых интеграций можно передать ссылку query-параметром:
+
+```bash
+curl 'http://localhost:8080/encode?url=https%3A%2F%2Fsub.your-provider.example%2Fabc123token'
+```
+
 ## What this is
 
 A small, dependency-free encoder for embedding subscription URLs in

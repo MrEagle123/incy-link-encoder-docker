@@ -1,0 +1,13 @@
+services:
+  incy-link-encoder-docker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: incy-link-encoder-docker:0.1
+    container_name: incy-link-encoder-docker
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
